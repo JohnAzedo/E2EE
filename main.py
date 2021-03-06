@@ -31,6 +31,3 @@ class Server:
     _chats: List[Chat]
     _clients: List[Client]
 
-
-# %%
-# Exec

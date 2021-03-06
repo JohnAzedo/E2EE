@@ -1,36 +1,50 @@
 # %%
 # Get 2 prime numbers, in which the product of the two is the public key
 from typing import List
+from sympy import sieve
+from random import randint
 import math 
 
 class RSA:
-    # Mock variables
-    p =  53; q = 59; e = 3; k=2
-
-    def __init__(self, message):
+    def __init__(self):
         super().__init__()
-        self.encode(message)
+        self.e = 3 
+        self.k = 2
+        self.get_primes()
+
+    def get_primes(self):
+        primes = [i for i in sieve.primerange(1, 1000) if i%6 == 5]
+        self.__q = primes[randint(0, len(primes))]
+        self.__p = primes[randint(0, len(primes))]
 
     def encode(self, message: str) -> List[int]:
-        self.encoded = []
+        encoded_message = []
         for letter in message:
-            self.encoded.append(ord(letter))
+            encoded_message.append(ord(letter))
+        return encoded_message
 
-    def encrypt(self):
+    def encrypt(self, message: str) -> List[int]:
+        encoded = self.encode(message)
         crypt_message = []
-        for i in self.encoded:
+        for i in encoded:
             crypt_message.append(i**self.e % self.public_key)
         return crypt_message
     
-    def decrypt(self, array):
+    def decrypt(self, array: List[int]) -> str:
         decrypt_message = []
         for i in array:
             decrypt_message.append(i**self.__private_key % self.public_key)
-        return decrypt_message
+        return self.decode(decrypt_message)
+
+    def decode(self, array: List[int]) -> str:
+        decoded_message = []
+        for i in array:
+            decoded_message.append(chr(i))
+        return ''.join(decoded_message)
 
     @property
     def __phi(self) -> int:
-        return (self.p-1)*(self.q-1)
+        return (self.__p-1)*(self.__q-1)
     
     @property
     def __private_key(self):
@@ -38,5 +52,4 @@ class RSA:
 
     @property
     def public_key(self) -> int:
-        return self.p * self.q
-# %%
+        return self.__p*self.__q
