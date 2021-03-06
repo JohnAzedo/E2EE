@@ -27,7 +27,6 @@ class Chat:
     
 
 # %%
-# TODO: Change it
 class Server:
     _chats: List[Chat]
     _clients: List[Client]
